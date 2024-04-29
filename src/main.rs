@@ -15,17 +15,12 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let letterboxd_url = format!("https://letterboxd.com/{}/films/by/date/", username.trim());
 
-    // Faire une requête GET à l'URL spécifiée
     let response = client.get(&letterboxd_url).send()?;
     let body = response.text()?;
-
-    // Parse le contenu HTML
     let document = Html::parse_document(&body);
 
     // Définir le sélecteur pour cibler tous les éléments avec l'attribut data-film-slug
     let title_selector = Selector::parse("[data-film-slug]").unwrap();
-
-    // Sélectionner tous les éléments correspondants
     let elements = document.select(&title_selector);
 
     // Parcourir les éléments sélectionnés et écrire la valeur de l'attribut data-film-slug dans le fichier CSV
@@ -42,9 +37,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     }
 }
-
-
-        // Construire l'URL de film-grab pour ce film
+        // Construire l'URL de film-grab
         let film_grab_url = format!("https://film-grab.com/bwg_gallery/{}", film_name_fixed);
 
         println!("URL de film-grab pour film: {}", film_grab_url);
@@ -71,8 +64,6 @@ fn main() -> Result<(), Box<dyn Error>> {
         fs::create_dir_all(&film_dir)?;
 
 
-        // let film_dir = Path::new(&gallery_dir/&film_name_fixed);
-        // fs::create_dir_all(&film_dir)?;
 
         // Télécharger chaque image
         for (img_index, img_element) in img_elements.enumerate() {
